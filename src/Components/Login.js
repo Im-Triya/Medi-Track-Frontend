@@ -22,12 +22,21 @@ function Login() {
     event.preventDefault();
     setErrors(Validation(values));
     if (errors.email === "" && errors.password === "") {
-      //if there are no errors in filling the name, email and password from the front end , then we navigate to home page
       axios
-      .post("http://localhost:8000/login", values)
+        .post("http://localhost:8000/login", values)
         .then((res) => {
-          if (res.data === "Success") {
-            navigate("/");
+          if (res.data.result === "Success") {
+            const role = res.data.role;
+  
+            // Navigate based on the user's role
+            if (role === "patient") {
+              navigate("/home", { state: { email: values.email } });
+            } else if (role === "doctor") {
+              navigate("/dochome", { state: { email: values.email } });
+            } else {
+              // Handle other roles if needed
+              alert("Invalid Role");
+            }
           } else {
             alert("No Record Found");
           }
@@ -38,6 +47,14 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-[#7e97a6]">
+     {/* 1st Div: MEDI */}
+     <div className="text-white text-8xl font-bold flex-1 flex flex-col items-center justify-center">
+        <div>M</div>
+        <div>E</div>
+        <div>D</div>
+        <div>I</div>
+      </div>
+
       <div className="bg-slate-200 p-6 rounded-xl">
         <form action="" onSubmit={handleSubmit}>
           <div className="mb-4 flex flex-col">
@@ -94,6 +111,16 @@ function Login() {
           </div>
         </form>
       </div>
+
+      {/* 3rd Div: TRACK */}
+      <div className="text-white text-8xl font-bold flex-1 flex flex-col items-center justify-center">
+        <div>T</div>
+        <div>R</div>
+        <div>A</div>
+        <div>C</div>
+        <div>K</div>
+      </div>
+      
     </div>
   );
 }
